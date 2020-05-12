@@ -155,7 +155,7 @@ rule fastqcReads_raw:
         mem="8G",
         runtime="12:00:00",
         outputdir="fastqc"
-    conda: ENV_dir +ENV_dir +"fastqc_env.yml"
+    conda: ENV_dir +"fastqc_env.yml"
 	message: "fastqc reads in {input}."
     log: "logs/fastqcReads_raw.{batch}.{sample}.log"
 	shell:
