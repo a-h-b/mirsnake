@@ -29,9 +29,10 @@ for(f in unlist(unique.files)){
 }
 
 for(f in unlist(ambigue.files)){
-  sam <- gsub("isomiR_SEA/","",
-              gsub("/out_result_mature_ambigue.txt","",
-                   gsub("/","__",f)))
+  sam <- gsub("/","__",
+              gsub("isomiR_SEA/","",
+                   gsub("/out_result_mature_ambigue.txt","",
+                        f)))
   miRall <- rbind(miRall,
                   data.frame("sample"=sam,
                              read.delim(f,stringsAsFactors = F),
