@@ -127,9 +127,9 @@ rule ALL:
     input:
         "status/fastqc.done",
         "sample_table.tsv",
-        "miRNA.workspace.RDS"
+        "miRNA.workspace.Rdata"
     output:
-        touch('workflow.done')
+        touch('status/workflow.done')
     threads: 1
 
 
@@ -396,7 +396,7 @@ rule combineResults:
         uni=expand("isomiR_SEA/{samples.batch}/{samples.sample}/out_result_mature_unique.txt", samples=samples.itertuples()),
         ambi=expand("isomiR_SEA/{samples.batch}/{samples.sample}/out_result_mature_ambigue.txt", samples=samples.itertuples())
     output:
-        "miRNA.workspace.RDS"
+        "miRNA.workspace.Rdata"
     threads: 1
     params:
         mem="8G",

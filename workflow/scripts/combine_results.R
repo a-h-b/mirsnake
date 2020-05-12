@@ -12,9 +12,10 @@ ambigue.files <- snakemake@input[['ambi']]
 
 first <- TRUE
 for(f in unlist(unique.files)){
-  sam <- gsub("isomiR_SEA/","",
+  sam <- gsub("/","__",
+            gsub("isomiR_SEA/","",
               gsub("/out_result_mature_unique.txt","",
-                   gsub("/","__",f)))
+                f)))
   if(first){
     miRall <- data.frame("sample"=sam,
                          read.delim(f,stringsAsFactors = F),
