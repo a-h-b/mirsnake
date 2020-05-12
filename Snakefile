@@ -324,7 +324,7 @@ rule tableCounts:
     input:
         "count_fas/{batch}/{sample}.trim_trim2_filt_counts.fa"
     output:
-        "count_tabs/{batch}/{sample}.countTab.tsv"
+        "count_tabs/{batch}/{sample}.countTab.txt"
     threads: 1
     params:
         mem="8G",
@@ -359,7 +359,7 @@ rule prepDB:
 # isomiRSEA
 rule isomirSEA:
     input:
-        "count_tabs/{batch}/{sample}.countTab.tsv",
+        "count_tabs/{batch}/{sample}.countTab.txt",
         "mature.txt"
     output:
         "isomiR_SEA/{batch}/{sample}/out_result_mature_unique.txt",
@@ -371,12 +371,23 @@ rule isomirSEA:
         runtime="24:00:00",
         isomirSEA_binary=config['path_to_isomirSEA'],
         length=config['miR_min_length'],
-        outdir="isomiR_SEA/{wildcards.batch}/{wildcards.sample}"
+        outdir="isomiR_SEA"
     message: "Running isomiR-SEA on {wildcards.sample}."
     log: "logs/isomirSEA.{batch}.{sample}.log"
     shell:
         """
-        {params.isomirSEA_binary} -s hsa -l {params.length} -ss 6 -h 11 -m mature --b 4 -i . -p {params.outdir} -t {input[0]} >> {output[2]} 2> {log}
+        mkdir -p {params.outdir}/{wildcards.batch}/{wildcards.sample}
+        cd {params.outdir}/{wildcards.batch}/{wildcards.sample}
+        cp ../../../{input[1]} .
+        cp ../../../{input[0]} .
+        FILE={input[0]}
+        IFILE=${{FILE##*/}}
+        IN=${{IFILE%.txt}}
+        {params.isomirSEA_binary} -s hsa -l {params.length} -ss 6 -h 11 -m mature -b 4 -i . -p {params.outdir} -t $IN >> ../../../{output[2]} 2> ../../../{log}
+        rm mature.txt
+        rm mature_db_group_sorted.txt
+        rm mature_db_group.txt
+        rm $IFILE 
         """
 
 # R to combine per-sample results
