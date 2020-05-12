@@ -1,6 +1,7 @@
 email: ""
 sample_table: "../samples.tsv"
 raw_directory: "../raw"
+tmp_dir: ""
 outputdir: "../output"
 sessionName: "test"
 adapters:
