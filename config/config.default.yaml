@@ -1,0 +1,16 @@
+email: ""
+sample_table: "../samples.tsv"
+raw_directory: "../raw"
+outputdir: "../output"
+sessionName: "test"
+adapters:
+  five_prime: GTTCAGAGTTCTACAGTCCGACGATC
+  three_prime: TGGAATTCTCGGGTGCCAAGG
+phred_format: "-Q33"
+read_length: 15
+tag_min_length: 16
+tag_max_length: 48
+miR_min_length: 16
+miR_DB: "/scratch/users/aheintzbuschart/miRNA/mature_high_conf.fa"
+path_to_isomirSEA: "/scratch/users/aheintzbuschart/miRNA/isomiR-SEA_1.6_webpacket/isomiR-SEA_OS/Debian_linux5_x86_64/isomiR-SEA_1_6"
+
