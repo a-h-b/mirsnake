@@ -242,25 +242,45 @@ rule fastqcReads_final:
         """
 
 # cutadapt
-rule cutReads:
-    input:
-        files = lambda wildcards: getRawFile(wildcards,RAW)
-    output:
-        "cln.adapt/{batch}/{sample}.trim.fq"
-    threads: 1
-    params:
-        mem="8G",
-        runtime="12:00:00",
-        five_prime=config['adapters']['five_prime'],
-        three_prime=config['adapters']['three_prime'],
-        length=config['read_length']
-    conda: ENV_dir +"cutadapt_env.yml"
-    message: "cutting adapters from reads in {input}."
-    log: "logs/cutReads.{batch}.{sample}.log"
-    shell:
-        """
-        cutadapt -a {params.five_prime}...{params.three_prime} -O 10 -m {params.length} -o {output} {input} &> {log}
-        """
+if config['adapters']['five_prime'] != "":
+    rule cutReads:
+        input:
+            files = lambda wildcards: getRawFile(wildcards,RAW)
+        output:
+            "cln.adapt/{batch}/{sample}.trim.fq"
+        threads: 1
+        params:
+            mem="8G",
+            runtime="12:00:00",
+            five_prime=config['adapters']['five_prime'],
+            three_prime=config['adapters']['three_prime'],
+            length=config['read_length']
+        conda: ENV_dir +"cutadapt_env.yml"
+        message: "cutting adapters from reads in {input}."
+        log: "logs/cutReads.{batch}.{sample}.log"
+        shell:
+            """
+            cutadapt -a {params.five_prime}...{params.three_prime} -O 10 -m {params.length} -o {output} {input} &> {log}
+            """
+else:
+    rule cutReads:
+        input:
+            files = lambda wildcards: getRawFile(wildcards,RAW)
+        output:
+            "cln.adapt/{batch}/{sample}.trim.fq"
+        threads: 1
+        params:
+            mem="8G",
+            runtime="12:00:00",
+            three_prime=config['adapters']['three_prime'],
+            length=config['read_length']
+        conda: ENV_dir +"cutadapt_env.yml"
+        message: "cutting adapters from reads in {input}."
+        log: "logs/cutReads.{batch}.{sample}.log"
+        shell:
+            """
+            cutadapt -a {params.three_prime} -O 10 -m {params.length} -o {output} {input} &> {log}
+            """
 
 # fastq_quality_trimmer
 rule trimReads:
